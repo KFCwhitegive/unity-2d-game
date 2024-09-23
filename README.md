@@ -15,7 +15,7 @@ Welcome to the `Project Name`! This is a collaborative Unity 2D game project dev
 
 ## **Getting Started**
 ### Prerequisites
-- Unity Version: [Specify the version you're using, e.g., Unity 2021.3.8f1]
+- Unity Version: [2022.3.47f1]
 - Git and GitHub account.
 - Basic knowledge of Unity 2D development.
 
