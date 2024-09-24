@@ -28,10 +28,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""id"": ""76ab62ec-b432-40a1-93b0-dbdcfaa9802a"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
+                    ""name"": ""Move"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""4e2e35d4-94f8-4d81-81dd-92676021c57b"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -39,15 +39,59 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""1bc432aa-cfc2-4d44-b6ea-18c9a54d1ea0"",
-                    ""path"": """",
+                    ""name"": ""2D Vector"",
+                    ""id"": ""ae890b6a-7bd8-49aa-aa2b-ea6b3689e4ac"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
-                    ""isComposite"": false,
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""df51b1a1-8b6a-458f-9384-2acf9ebff1f4"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""f75a2d54-965b-404e-9b1f-402dbb08e29b"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""21114485-ca7b-464d-87f7-b65522ddbb45"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""5832dc40-98a2-49f2-a2f2-90ffddd65419"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -56,7 +100,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
 }");
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
-        m_Movement_Newaction = m_Movement.FindAction("New action", throwIfNotFound: true);
+        m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -118,12 +162,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     // Movement
     private readonly InputActionMap m_Movement;
     private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
-    private readonly InputAction m_Movement_Newaction;
+    private readonly InputAction m_Movement_Move;
     public struct MovementActions
     {
         private @PlayerControls m_Wrapper;
         public MovementActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Movement_Newaction;
+        public InputAction @Move => m_Wrapper.m_Movement_Move;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -133,16 +177,16 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MovementActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MovementActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -162,6 +206,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public MovementActions @Movement => new MovementActions(this);
     public interface IMovementActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
     }
 }
